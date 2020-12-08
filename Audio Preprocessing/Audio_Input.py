@@ -17,10 +17,19 @@ class Audio_Preprocessor:
 	def Complex_Spectrogram(self,Audio_Path):
 
 		# load Audio File
-		audio, sr = librosa.load(Audio_Path,sr=self.Sampling_Rate,mono=True,duration = 6.0)
+		audio, sr = librosa.load(Audio_Path,sr=self.Sampling_Rate,mono=True)
+
+		# check the Audio duration 
+		if(audio.shape[0] < self.Sampling_Rate*6):
+			audio = np.resize(audio,(self.Sampling_Rate*6,))
+		
+		elif(audio.shape[0] > self.Sampling_Rate*6):
+			audio = audio[0:self.Sampling_Rate*6]
 
 		# calculate the STFT
 		Frequency_Components = librosa.stft(audio, n_fft = self.Frame_Size, hop_length = self.Hop_Length, win_length = self.Hann_Window )
+
+		print(Frequency_Components.shape)
 
 		# seperate the Real and imaginary parts and apply the Power low
 		Real_Part      = np.real(Frequency_Components)
