@@ -1,11 +1,11 @@
 
 import os
+import tensorflow as tf
 import librosa
 import librosa.display
 import IPython.display as ipd
 import numpy as np
 import matplotlib.pyplot as plt
-
 class Audio_Preprocessor:
 
 	def __init__(self, wav_path = "",Processed_path="",sr = 16000, frSize = 512, HopLength = 160, HannWindow = 400):
@@ -23,7 +23,8 @@ class Audio_Preprocessor:
 	def Complex_Spectrogram(self,Audio_Path):
 
 		# load Audio File
-		audio, sr = librosa.load(Audio_Path,sr=self.Sampling_Rate,mono=True,duration=6.0)
+		input_data = tf.io.read_file(Audio_Path)
+		audio , sr= tf.audio.decode_wav(input_data, desired_channels=1, desired_samples=self.Sampling_Rate)
 		# check the Audio duration 
 		if(audio.shape[0] < self.Sampling_Rate*6):
 			print("Smaller")
@@ -34,8 +35,7 @@ class Audio_Preprocessor:
 			audio = audio[0:self.Sampling_Rate*6-1]
 		
 		# calculate the STFT
-		Frequency_Components = librosa.stft(audio, n_fft = self.Frame_Size, hop_length = self.Hop_Length, win_length = self.Hann_Window, window = "hann",center=False )
-
+		Frequency_Components = tf.signal.stft(audio, fft_length = self.Frame_Size, frame_step = self.Hop_Length, frame_length = self.Hann_Window, window_fn = tf.signal.hann_window )
 		print(Frequency_Components.shape)
 
 		# seperate the Real and imaginary parts and apply the Power low
@@ -94,8 +94,6 @@ Audio_Path = "E:\\GraduationProject\\Code\\AVDataset\\audios\\_2Rjfow5gow.wav"
 Real_Part,Imaginary_Part =Preprocessor.Complex_Spectrogram(Audio_Path)
 
 print(Real_Part.shape,Imaginary_Part.shape)
-Preprocessor.Draw_Spectrograms(Real_Part,Imaginary_Part)
-
-
+#Preprocessor.Draw_Spectrograms(Real_Part,Imaginary_Part)
 
 
