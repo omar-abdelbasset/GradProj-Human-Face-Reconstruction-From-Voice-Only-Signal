@@ -194,11 +194,11 @@ class Youtube:
 #print(downloadvideo("307DK9nGQhw","00:01:30","00:01:33"))
 
                       
-x= GetDataset()
-x.setDatasetCSV("avspeech_train.csv")
-x.setAudioOutputFolder("audios")
-x.setPhotoOutputFolder("photos")
-x.convertVideos()
+# x= GetDataset()
+# x.setDatasetCSV("avspeech_train.csv")
+# x.setAudioOutputFolder("audios")
+# x.setPhotoOutputFolder("photos")
+# x.convertVideos()
 
 
 
