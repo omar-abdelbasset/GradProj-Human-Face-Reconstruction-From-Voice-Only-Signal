@@ -5,3 +5,4 @@
 /photos
 /videos
 /*.txt
+/loss_fn
